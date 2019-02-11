@@ -1,0 +1,8 @@
+<keyword#4> <predef#0> <special#5> <special#6> 
+<special#0> 
+<keyword#0> <symbol#0> <special#2> 
+<symbol#0> <special#7> <symbol#0> <special#2> 
+<keyword#0> <symbol#1> <special#7> <symbol#1> <special#2> 
+<symbol#0> <special#7> <symbol#1> <operator#0> <symbol#1> <special#2> 
+<predef#1> <special#5> <special#3> <operator#4> <symbol#2> <special#3> <symbol#0> <special#6> <special#2> 
+<special#1> 
