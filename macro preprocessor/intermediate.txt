@@ -1,0 +1,10 @@
+
+
+prg 	start
+using *, 15
+incr 	data1, data2
+incr1	data3, data4
+four 	dc	f'4'
+five	dc	f'5'
+temp	ds	'1'f
+end

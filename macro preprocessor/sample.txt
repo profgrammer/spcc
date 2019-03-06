@@ -5,7 +5,7 @@ L 2, &b
 MEND
 
 MACRO
-&LBL INCR1 &arg1, &arg2
+INCR1 &arg1, &arg2
 L 3, &arg1
 ST 4, &arg2
 MEND

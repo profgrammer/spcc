@@ -2,8 +2,10 @@ import re
 import time
 
 f = open('sample.txt', 'r')
+out = open('intermediate.txt', 'w')
+tables = open('tables.py', 'w')
 
-mnt = []
+mnt = {}
 mdt = []
 ala = {}
 
@@ -33,7 +35,7 @@ while i < (len(lines)):
 				macroName = None
 			elif word.startswith('&'):
 				# print(str(ala[macroName]))
-				mdtLine += ("#" + str(ala[macroName].index(word)) + " ")
+				mdtLine += (", #" + str(ala[macroName].index(word)) + " ")
 			else:
 				mdtLine += (word + " ")
 
@@ -55,7 +57,8 @@ while i < (len(lines)):
 				macroName = twords[0].lower()
 				ala[macroName] = list()
 				ala[macroName].append(None)
-			mnt.append({"name": macroName, "mdtindex": len(mdt)})
+			# mnt.append({"name": macroName, "mdtindex": len(mdt)})
+			mnt[macroName] = {"index": len(mdt)}
 			for k in range(1, len(twords)):
 				if twords[k].startswith('&'):
 					ala[macroName].append(twords[k])
@@ -63,10 +66,15 @@ while i < (len(lines)):
 	if mdtLine != '':
 		mdt.append(mdtLine)
 	if not macroLine:
+		out.write(lines[i].lower())
 		print(lines[i].lower().replace('\n', ''))
 	i += 1
 t2 = time.time()
 print("mdt = " + str(mdt))
 print("mnt = " + str(mnt))
 print("ala = " + str(ala))
-print("Execution time = " + str())
+tables.write("mdt = " + str(mdt) + "\n")
+tables.write("mnt = " + str(mnt) + "\n")
+tables.write("ala = " + str(ala) + "\n")
+# print(str(t1) + " " + str(t2))
+print("Execution time = " + str(t2 - t1))
