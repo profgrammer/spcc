@@ -1,6 +1,7 @@
 import re
 from tables import literals, symbols
 from motpot import mot, pot
+import time
 
 f = open('intermediate.txt', 'r')
 base = [-1 for i in range(16)]
@@ -17,7 +18,7 @@ def find_nearest(ea):
 	return reg
 
 
-
+t1 = time.time()
 for line in f.readlines():
 
 	words = re.split(r'[,\s]+', line)
@@ -26,7 +27,7 @@ for line in f.readlines():
 		word = words[i].lower()
 		if word == '' or word == ' ':
 			continue
-		
+
 		if word in pot:
 			if word == 'start':
 				lc = int(words[i+1])
@@ -39,7 +40,7 @@ for line in f.readlines():
 				else:
 					for symbol in symbols:
 						if symbol["symbol"] == words[i+1].lower():
-							arg1 = symbol["value"]			
+							arg1 = symbol["value"]
 				if words[i+2].isnumeric():
 					arg2 = int(words[i+2])
 				else:
@@ -61,7 +62,7 @@ for line in f.readlines():
 							lc += literal['length']
 			elif word == 'ds':
 				val = int(words[i+1][:-1])
-				
+
 				print(lc, word, '------------')
 				lc += 4 * val
 			elif word == 'dc':
@@ -73,7 +74,7 @@ for line in f.readlines():
 							lc += 4
 
 		elif word in mot:
-			
+
 			if mot[word]["type"] == 'rr':
 				arg1, arg2 = -1, -1
 				if word == 'br':
@@ -109,7 +110,7 @@ for line in f.readlines():
 			elif mot[word]["type"] == 'rx':
 
 				arg1 = 0
-				
+
 				if word == 'bne':
 					arg1 = 7
 					ea = 0
@@ -167,28 +168,9 @@ for line in f.readlines():
 					d = ea - cbr
 					print(str(lc) + " " + word + " " + str(arg1) + ", " + str(d) + "(" + str(index) + ", " + str(reg) + ")")
 			lc += mot[word]['length']
-	count += 1	
-				
-							
-		
+	count += 1
 
 
+t2 = time.time()
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
+print('Time for pass 2: ' + str(t2 - t1)) 	
