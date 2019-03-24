@@ -15,6 +15,12 @@ index = 0
 lines = f.readlines()
 macroName = None
 
+def findIndex(macroName, word):
+	values = list()
+	for i in range(len(ala[macroName])):
+		values.append(ala[macroName][i]["value"])
+	return values.index(word)
+
 i = 0
 t1 = time.time()
 while i < (len(lines)):
@@ -35,7 +41,10 @@ while i < (len(lines)):
 				macroName = None
 			elif word.startswith('&'):
 				# print(str(ala[macroName]))
-				mdtLine += (", #" + str(ala[macroName].index(word)) + " ")
+				if findIndex(macroName, word) == 0:
+					mdtLine += "#0 "
+				else:
+					mdtLine += (", #" + str(findIndex(macroName, word)) + " ")
 			else:
 				mdtLine += (word + " ")
 
@@ -52,16 +61,27 @@ while i < (len(lines)):
 			if twords[0].startswith('&'):
 				macroName = twords[1].lower()
 				ala[macroName] = list()
-				ala[macroName].append(twords[0].lower())
+				ala[macroName].append({"value": twords[0].lower(), "type": "p", "default": None})
 			else:
 				macroName = twords[0].lower()
 				ala[macroName] = list()
-				ala[macroName].append(None)
+				ala[macroName].append({"value": None, "type": "p", "default": None})
 			# mnt.append({"name": macroName, "mdtindex": len(mdt)})
 			mnt[macroName] = {"index": len(mdt)}
 			for k in range(1, len(twords)):
 				if twords[k].startswith('&'):
-					ala[macroName].append(twords[k])
+					# positional parameter
+					if twords[k].find('=') == -1:
+						ala[macroName].append({"value": twords[k].lower(), "type": "p", "default": None})
+					else:
+						_twords = re.split('=', twords[k])
+						# keyword parameter
+						if len(_twords) == 1:
+							ala[macroName].append({"value": _twords[0].lower(), "type": "k", "default": None})
+						# default parameter
+						else:
+							ala[macroName].append({"value": _twords[0].lower(), "type": "d", "default": _twords[1].lower()})
+					print(ala[macroName])
 			break
 	if mdtLine != '':
 		mdt.append(mdtLine)

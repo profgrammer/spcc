@@ -5,6 +5,17 @@ f = open('intermediate.txt', 'r')
 
 lines = f.readlines()
 
+def findIndex(macroName, word):
+	values = list()
+	for i in range(len(ala[macroName])):
+		values.append(ala[macroName][i]["value"])
+	return values.index(word)
+
+def findParameter(_ala, ind):
+    for param in _ala:
+        if param["index"] == ind:
+            return param["value"]
+
 i = 0
 
 t1 = time.time()
@@ -20,12 +31,53 @@ while i < len(lines):
             first = re.split(r'[\s,]+', lines[i])
             first.pop()
             _ala = list()
-            if first[0].startswith('&'):
-                _ala.append(first[0])
+            # print("first=", first)
+            if ala[word][0]["value"] is not None:
+                _ala.append({"index": 0, "value": first[0]})
+                for k in range(2, len(first)):
+                    # keyword or default parameter
+                    if first[k].startswith("&"):
+                        x = re.split("=", first[k])
+                        # keyword
+                        if len(x) == 2:
+                            ind = findIndex(word, x[0])
+                            _ala.append({"index": ind, "value": x[1]})
+                        # default
+                        else:
+                            ind = findIndex(word, x[0])
+                            _ala.append({"index": ind, "value": ala[word][ind]["default"]})
+                    else:
+                        # ind = findIndex(word, first[k])
+                        _ala.append({"index": len(_ala), "value": first[k]})
+
             else:
-                _ala.append(None)
-            for k in range(1, len(first)):
-                _ala.append(first[k])
+                _ala.append({"index": 0, "value": None})
+                for k in range(1, len(first)):
+                    # keyword parameter
+                    if first[k].startswith("&"):
+                        x = re.split("=", first[k])
+                        # keyword
+                        if len(x) == 2:
+                            ind = findIndex(word, x[0])
+                            _ala.append({"index": ind, "value": x[1]})
+                        else:
+                            ind = findIndex(word, x[0])
+                            _ala.append({"index": ind, "value": ala[word][ind]["default"]})
+                    else:
+                        # ind = findIndex(word, first[k])
+                        _ala.append({"index": len(_ala), "value": first[k]})
+            # filling in default values
+            for it in range(len(ala[word])):
+                obj = ala[word][it]
+                if obj["type"] == "d":
+                    found = False
+                    for obj1 in _ala:
+                        if obj1["index"] == i:
+                            found = True
+                            break
+                    if not found:
+                        ind = findIndex(word, obj["value"])
+                        _ala.append({"index": ind, "value": ala[word][ind]["default"]})
             # print(_ala)
             mdtp += 1
             mend = False
@@ -38,13 +90,16 @@ while i < len(lines):
                     a = re.findall(pattern, l)
                     for k in range(len(a)):
                         ind = int(a[k].replace('#', ''))
-                        l = l.replace(a[k], _ala[ind])
+                        val = findParameter(_ala, ind)
+                        l = l.replace(a[k], val)
                     print(l)
                 mdtp += 1
             break
         else:
-            print(lines[i].replace('\n', ''))
-            break
+            if j == len(words) - 1:
+                print(lines[i].replace('\n', ''))
+                break
+
 
     i += 1
 

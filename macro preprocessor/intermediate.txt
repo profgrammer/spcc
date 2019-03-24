@@ -2,8 +2,8 @@
 
 prg 	start
 using *, 15
-incr 	data1, data2
-incr1	data3, data4
+incr 	data1, data2, &c=data3
+label1 incr1	data3, &arg3=data4, &arg2=data7
 four 	dc	f'4'
 five	dc	f'5'
 temp	ds	'1'f

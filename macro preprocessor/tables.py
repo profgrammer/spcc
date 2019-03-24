@@ -1,3 +1,3 @@
-mdt = ['incr &a, &b', 'a 1 , #1 ', 'l 2 , #2 ', 'mend', 'incr1 &arg1, &arg2', 'l 3 , #1 ', 'st 4 , #2 ', 'mend']
-mnt = {'incr': {'index': 0}, 'incr1': {'index': 4}}
-ala = {'incr': [None, '&a', '&b'], 'incr1': [None, '&arg1', '&arg2']}
+mdt = ['incr &a, &b, &c=x', 'a 1 , #1 ', 'l 2 , #2 ', 'st 3 , #3 ', 'mend', '&lab incr1 &arg1, &arg2=, &arg3=', 'l 3 , #1 ', 'l 7 , #3 ', '#0 st 4 , #2 ', 'mend']
+mnt = {'incr': {'index': 0}, 'incr1': {'index': 5}}
+ala = {'incr': [{'value': None, 'type': 'p', 'default': None}, {'value': '&a', 'type': 'p', 'default': None}, {'value': '&b', 'type': 'p', 'default': None}, {'value': '&c', 'type': 'd', 'default': 'x'}], 'incr1': [{'value': '&lab', 'type': 'p', 'default': None}, {'value': '&arg1', 'type': 'p', 'default': None}, {'value': '&arg2', 'type': 'd', 'default': ''}, {'value': '&arg3', 'type': 'd', 'default': ''}]}
